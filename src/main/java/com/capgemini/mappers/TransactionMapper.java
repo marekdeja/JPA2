@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Component
 public class TransactionMapper {
@@ -18,6 +19,7 @@ public class TransactionMapper {
     private EntityManager entityManager;
     @Autowired
     CustomerMapper customerMapper;
+
 
     public static TransactionTO toTransactionTO(TransactionEntity transactionEntity) {
         if (transactionEntity == null)
@@ -64,9 +66,20 @@ public class TransactionMapper {
             transactionEntity.setProductEntities(productEntities);
         }
 
-
-
         return transactionEntity;
+    }
 
+    public static Collection<TransactionTO> map2TOs (Collection<TransactionEntity> transactionEntities){
+        if (transactionEntities==null){
+            return new HashSet<>();
+        }
+        return transactionEntities.stream().map(TransactionMapper::toTransactionTO).collect(Collectors.toList());
+    }
+
+    public Collection<TransactionEntity> map2Entities (Collection<TransactionTO> transactionTOs){
+        if (transactionTOs==null){
+            return new HashSet<>();
+        }
+        return transactionTOs.stream().map(this::toTransactionEntity).collect(Collectors.toList());
     }
 }

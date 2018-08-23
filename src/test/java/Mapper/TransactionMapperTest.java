@@ -43,12 +43,12 @@ public class TransactionMapperTest {
 
         TransactionEntity transactionEntity1 = new TransactionEntity( Status.INREALIZATION, new Date(2018-10-10), 2, null, productsEntities);
 
-        TransactionTO transactionTO = TransactionMapper.toTransactionTO(transactionEntity1);
 
         //when
-        int size = transactionTO.getProductIDs().size();
+        TransactionTO transactionTO = TransactionMapper.toTransactionTO(transactionEntity1);
 
         //then
+        int size = transactionTO.getProductIDs().size();
         Assertions.assertThat(size).isEqualTo(1);
     }
 }

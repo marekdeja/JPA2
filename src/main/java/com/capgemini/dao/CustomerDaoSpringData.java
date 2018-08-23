@@ -8,5 +8,7 @@ import java.util.List;
 public interface CustomerDaoSpringData extends CrudRepository<CustomerEntity, Long> {
 
     List<CustomerEntity> findByName (String name);
+    List<CustomerEntity> findBySurname (String name);
+
 
 }

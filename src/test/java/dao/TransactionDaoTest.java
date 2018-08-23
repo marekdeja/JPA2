@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Date;
 
 @RunWith(SpringRunner.class)
@@ -20,6 +22,9 @@ public class TransactionDaoTest {
 
     @Autowired
     private TransactionDao transactionDao;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
 
     @Test
@@ -75,7 +80,8 @@ public class TransactionDaoTest {
         //when
        Date createDate = save1.getCreateDate();
        int year = createDate.getYear();
-       int yearToday = new Date().getYear();
+        int yearToday = new Date().getYear();
+
         //then
         Assertions.assertThat(createDate).isNotNull();
         Assertions.assertThat(year).isEqualTo(yearToday);
@@ -90,6 +96,7 @@ public class TransactionDaoTest {
         save1.setAmount(5);
         TransactionEntity update1 = transactionDao.update(save1);
 
+        entityManager.flush();
         System.out.println(update1.getCreateDate());
         System.out.println(update1.getModifiedDate());
 
@@ -99,6 +106,7 @@ public class TransactionDaoTest {
         int year = updateDate.getYear();
         System.out.println(year);
         int yearToday = new Date().getYear();
+
         //then
         Assertions.assertThat(updateDate).isNotNull();
         Assertions.assertThat(year).isEqualTo(yearToday);
