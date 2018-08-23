@@ -5,13 +5,18 @@ import com.capgemini.domain.ProductEntity;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.types.ProductTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.HashSet;
 
+@Component
 public class ProductMapper {
-    @Autowired
-    private static TransactionDao transactionDao;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public static ProductTO toProductTO(ProductEntity productEntity) {
         if (productEntity == null)
@@ -36,7 +41,7 @@ public class ProductMapper {
                 .build();
     }
 
-    public static ProductEntity toProductEntity(ProductTO productTO) {
+    public ProductEntity toProductEntity(ProductTO productTO) {
         if (productTO == null)
             return null;
 
@@ -52,7 +57,7 @@ public class ProductMapper {
 
         if (transactions!=null){
             for (Long element : transactions){
-                TransactionEntity transactionEntity = transactionDao.getOne(element);
+                TransactionEntity transactionEntity = entityManager.getReference(TransactionEntity.class, element);
                 transactionEntities.add(transactionEntity);
             }
             productEntity.setTransactions(transactionEntities);

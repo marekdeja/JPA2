@@ -15,11 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = StarterKitJpaStarterApplication.class)
+@SpringBootTest(classes = StarterKitJpaStarterApplication.class, properties = "spring.profiles.active=mysql")
 public class TransactionDaoTest {
 
     @Autowired
     private TransactionDao transactionDao;
+
 
     @Test
     @Transactional
@@ -43,6 +44,7 @@ public class TransactionDaoTest {
     @Transactional
     public void shouldDeleteOneEntityFromThreeEntitiesThenSizeIsTwo(){
         //given
+
         TransactionEntity transactionEntity1 = new TransactionEntity( Status.INREALIZATION, new Date(2018-10-10), 0, null, null);
         TransactionEntity transactionEntity2 = new TransactionEntity( Status.INREALIZATION, new Date(2017-10-10), 2, null, null);
         TransactionEntity transactionEntity3 = new TransactionEntity( Status.INREALIZATION, new Date(2016-10-10), 3, null, null);
@@ -56,9 +58,50 @@ public class TransactionDaoTest {
 
         //then
         long size = transactionDao.count();
+        System.out.println(size);
         Assertions.assertThat(size).isEqualTo(2);
-        Assertions.assertThat(transactionDao.getOne(2L).getAmount()).isEqualTo(2);
-        Assertions.assertThat(transactionDao.getOne(3L).getAmount()).isEqualTo(3);
+        Assertions.assertThat(save2.getAmount()).isEqualTo(2);
+        Assertions.assertThat(save3.getAmount()).isEqualTo(3);
 
     }
+
+    @Test
+    @Transactional
+    public void shouldCreateCreateDateAndYearIsYearToday(){
+        //given
+        TransactionEntity transactionEntity1 = new TransactionEntity( Status.INREALIZATION, new Date(2018-10-10), 0, null, null);
+        TransactionEntity save1 = transactionDao.save(transactionEntity1);
+
+        //when
+       Date createDate = save1.getCreateDate();
+       int year = createDate.getYear();
+       int yearToday = new Date().getYear();
+        //then
+        Assertions.assertThat(createDate).isNotNull();
+        Assertions.assertThat(year).isEqualTo(yearToday);
+    }
+
+    @Test
+    @Transactional
+    public void shouldCreateModifiedDateAndYearIsYearToday(){
+        //given
+        TransactionEntity transactionEntity1 = new TransactionEntity( Status.INREALIZATION, new Date(2018-10-10), 0, null, null);
+        TransactionEntity save1 = transactionDao.save(transactionEntity1);
+        save1.setAmount(5);
+        TransactionEntity update1 = transactionDao.update(save1);
+
+        System.out.println(update1.getCreateDate());
+        System.out.println(update1.getModifiedDate());
+
+
+        //when
+        Date updateDate = save1.getModifiedDate();
+        int year = updateDate.getYear();
+        System.out.println(year);
+        int yearToday = new Date().getYear();
+        //then
+        Assertions.assertThat(updateDate).isNotNull();
+        Assertions.assertThat(year).isEqualTo(yearToday);
+    }
+
 }

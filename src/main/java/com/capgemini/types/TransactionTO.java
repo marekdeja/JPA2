@@ -13,6 +13,10 @@ import java.util.Date;
 @Builder
 public class TransactionTO {
 
+    public int version;
+    private Date createDate;
+    private Date modifiedDate;
+
     private Long id;
     private Status status;
     private Date date;
@@ -22,6 +26,30 @@ public class TransactionTO {
 
     @Singular
     private Collection<Long> productIDs;
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
 
     public Long getId() {
         return id;

@@ -1,4 +1,4 @@
-package com.capgemini.dao;
+package com.capgemini.dao.listeners;
 
 import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.ProductEntity;

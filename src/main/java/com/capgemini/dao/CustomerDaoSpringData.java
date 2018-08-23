@@ -5,6 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface CustomerDao extends Dao<CustomerEntity, Long> {
+public interface CustomerDaoSpringData extends CrudRepository<CustomerEntity, Long> {
+
+    List<CustomerEntity> findByName (String name);
 
 }

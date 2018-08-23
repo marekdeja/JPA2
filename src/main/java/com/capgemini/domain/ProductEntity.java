@@ -1,7 +1,6 @@
 package com.capgemini.domain;
 
-import com.capgemini.dao.ListenerCustomer;
-import com.capgemini.dao.ListenerProduct;
+import com.capgemini.dao.listeners.ListenerProduct;
 
 import javax.persistence.*;
 import java.util.Collection;

@@ -3,6 +3,7 @@ package com.capgemini.mappers;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.domain.ProductEntity;
 import com.capgemini.types.TransactionTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -15,6 +16,8 @@ public class TransactionMapper {
 
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
+    CustomerMapper customerMapper;
 
     public static TransactionTO toTransactionTO(TransactionEntity transactionEntity) {
         if (transactionEntity == null)
@@ -35,7 +38,7 @@ public class TransactionMapper {
                 .date(transactionEntity.getDate())
                 .amount(transactionEntity.getAmount())
                 .customer(CustomerMapper.toCustomerTO(transactionEntity.getCustomer()))
-                .productEntities(productIDs)
+                .productIDs(productIDs)
                 .build();
     }
 
@@ -48,7 +51,7 @@ public class TransactionMapper {
         transactionEntity.setStatus(transactionTO.getStatus());
         transactionEntity.setDate(transactionTO.getDate());
         transactionEntity.setAmount(transactionTO.getAmount());
-        transactionEntity.setCustomer(CustomerMapper.toCustomerEntity(transactionTO.getCustomer()));
+        transactionEntity.setCustomer(customerMapper.toCustomerEntity(transactionTO.getCustomer()));
 
         Collection<Long> products = transactionTO.getProductIDs();
         Collection<ProductEntity> productEntities = new HashSet<>();

@@ -1,7 +1,7 @@
 package com.capgemini.domain;
 
 
-import com.capgemini.dao.ListenerTransaction;
+import com.capgemini.dao.listeners.ListenerTransaction;
 import com.capgemini.enums.Status;
 
 import javax.persistence.*;
@@ -57,6 +57,14 @@ public class TransactionEntity {
         this.amount = amount;
         this.customer = customer;
         this.productEntities = productEntities;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public Date getCreateDate() {

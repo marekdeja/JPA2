@@ -5,15 +5,18 @@ import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.types.CustomerTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.HashSet;
 
-
+@Component
 public class CustomerMapper {
-    @Autowired
-    private static TransactionDao transactionDao;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public static CustomerTO toCustomerTO(CustomerEntity customerEntity) {
         if (customerEntity == null)
@@ -40,7 +43,7 @@ public class CustomerMapper {
                 .build();
     }
 
-    public static CustomerEntity toCustomerEntity(CustomerTO customerTO) {
+    public CustomerEntity toCustomerEntity(CustomerTO customerTO) {
         if (customerTO == null)
             return null;
 
@@ -58,7 +61,7 @@ public class CustomerMapper {
 
         if (transactions!=null){
             for (Long element : transactions){
-                TransactionEntity transactionEntity = transactionDao.getOne(element);
+                TransactionEntity transactionEntity = entityManager.getReference(TransactionEntity.class, element);
                 transactionEntities.add(transactionEntity);
             }
             customerEntity.setTransactions(transactionEntities);

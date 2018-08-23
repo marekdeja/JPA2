@@ -1,6 +1,6 @@
 package com.capgemini.domain;
 
-import com.capgemini.dao.ListenerCustomer;
+import com.capgemini.dao.listeners.ListenerCustomer;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -39,6 +39,35 @@ public class CustomerEntity {
 
     public CustomerEntity(){
 
+    }
+
+    public CustomerEntity(String name, String surname, Date birth, String email, Integer phone, String address, Collection<TransactionEntity> transactions) {
+        this.name = name;
+        this.surname = surname;
+        this.birth = birth;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.transactions = transactions;
+    }
+
+    public CustomerEntity(Long id, String name, String surname, Date birth, String email, Integer phone, String address, Collection<TransactionEntity> transactions) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.birth = birth;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.transactions = transactions;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public Date getCreateDate() {

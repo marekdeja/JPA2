@@ -5,6 +5,7 @@ import com.capgemini.domain.ProductEntity;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.Status;
 import com.capgemini.mappers.TransactionMapper;
+import com.capgemini.types.ProductTO;
 import com.capgemini.types.TransactionTO;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -46,8 +47,7 @@ public class TransactionMapperTest {
 
         //when
         int size = transactionTO.getProductIDs().size();
-        TransactionTO t = transactionTO.get
-        Long id = .getId();
+
         //then
         Assertions.assertThat(size).isEqualTo(1);
     }
