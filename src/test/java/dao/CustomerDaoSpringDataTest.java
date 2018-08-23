@@ -27,7 +27,7 @@ public class CustomerDaoSpringDataTest {
 
     @Test
     @Transactional
-   // @Rollback(false)
+   //@Rollback(false)
     public void shouldFindCustomerByName(){
         //given
         CustomerEntity customerEntity1 = new CustomerEntity("Dawid", "Dawidowski", new Date(2018-10-10),"daw@buziaczek.pl", 505896533, "Warszawa", null);
@@ -111,7 +111,4 @@ public class CustomerDaoSpringDataTest {
         //then
         Assertions.assertThat(customerSearched.size()).isEqualTo(2);
     }
-
-
-
 }

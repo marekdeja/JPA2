@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Component
 public class CustomerMapper {
@@ -71,5 +72,19 @@ public class CustomerMapper {
 
         return customerEntity;
 
+    }
+
+    public static Collection<CustomerTO> map2TOs (Collection<CustomerEntity> customerEntities){
+        if (customerEntities==null){
+            return new HashSet<>();
+        }
+        return customerEntities.stream().map(CustomerMapper::toCustomerTO).collect(Collectors.toList());
+    }
+
+    public Collection<CustomerEntity> map2Entities (Collection<CustomerTO> customerTOs){
+        if (customerTOs==null){
+            return new HashSet<>();
+        }
+        return customerTOs.stream().map(this::toCustomerEntity).collect(Collectors.toList());
     }
 }

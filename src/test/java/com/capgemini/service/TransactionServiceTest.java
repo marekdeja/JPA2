@@ -1,10 +1,13 @@
 package com.capgemini.service;
 
 import com.capgemini.StarterKitJpaStarterApplication;
+import com.capgemini.dao.CustomerDao;
 import com.capgemini.dao.TransactionDao;
 import com.capgemini.dao.TransactionDaoSpringData;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.Status;
+import com.capgemini.service.impl.TransactionServiceImpl;
+import com.capgemini.types.CustomerTO;
 import com.capgemini.types.TransactionTO;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -23,6 +26,12 @@ public class TransactionServiceTest {
 
     @Autowired
     TransactionService transactionService;
+    @Autowired
+    TransactionServiceImpl transactionServiceImpl;
+    @Autowired
+    CustomerService customerService;
+    @Autowired
+    CustomerDao customerDao;
     @Autowired
     TransactionDao transactionDao;
     @Autowired
@@ -149,7 +158,7 @@ public class TransactionServiceTest {
 
 
         //when
-        TransactionTO transactionOne = transactionService.findOne(3L);
+        TransactionTO transactionOne = transactionService.findOne(transactionTOSaved3.getId());
 
         //then
         int amount = transactionOne.getAmount();
@@ -188,5 +197,98 @@ public class TransactionServiceTest {
         //then
 
         Assertions.assertThat(transactionOne).isNull();
+    }
+
+    @Test
+    @Transactional
+    public void shouldNotSaveTransactions(){
+        //given
+        TransactionTO transactionTO1 = TransactionTO.builder()
+                .status(Status.INREALIZATION)
+                .date(new Date(2018-1-5))
+                .amount(300)
+                .build();
+        TransactionTO transactionTO2 = TransactionTO.builder()
+                .status(Status.INREALIZATION)
+                .date(new Date(2018-1-5))
+                .amount(400)
+                .build();
+        TransactionTO transactionTO3 = TransactionTO.builder()
+                .status(Status.INREALIZATION)
+                .date(new Date(2018-1-5))
+                .amount(500)
+                .build();
+
+        TransactionTO transactionTOSaved1 = transactionService.saveTransaction(transactionTO1);
+        TransactionTO transactionTOSaved2 = transactionService.saveTransaction(transactionTO2);
+        TransactionTO transactionTOSaved3 = transactionService.saveTransaction(transactionTO3);
+
+
+        //when
+        TransactionTO transactionOne = transactionService.findOne(44L);
+
+        //then
+
+        Assertions.assertThat(transactionOne).isNull();
+    }
+
+    @Test
+    @Transactional
+    public void shouldCheckThreeTransactionAndReturnFalse(){
+        //given
+        CustomerTO customerTO = CustomerTO.builder()
+                .name("Rafal")
+                .build();
+
+        CustomerTO customerSaved1 = customerService.saveCustomer(customerTO);
+
+        TransactionTO transactionTO1 = TransactionTO.builder()
+                .status(Status.INREALIZATION)
+                .date(new Date(2018-1-5))
+                .customer(customerSaved1)
+                .build();
+
+        TransactionTO transactionTOSaved1 = transactionService.saveTransaction(transactionTO1);
+
+        //when
+        boolean check = transactionServiceImpl.checkThreeTransactions(transactionService.findOne(transactionTOSaved1.getId()));
+        //then
+        Assertions.assertThat(check).isEqualTo(false);
+    }
+
+    @Test
+    @Transactional
+    public void shouldCheckThreeTransactionAndReturnTrue(){
+        //given
+        CustomerTO customerTO = CustomerTO.builder()
+                .name("Rafal")
+                .build();
+
+        CustomerTO customerSaved1 = customerService.saveCustomer(customerTO);
+
+        TransactionTO transactionTO1 = TransactionTO.builder()
+                .status(Status.REALIZED)
+                .date(new Date(2018-1-5))
+                .customer(customerSaved1)
+                .build();
+        TransactionTO transactionTO2 = TransactionTO.builder()
+                .status(Status.REALIZED)
+                .date(new Date(2018-1-5))
+                .customer(customerSaved1)
+                .build();
+        TransactionTO transactionTO3 = TransactionTO.builder()
+                .status(Status.REALIZED)
+                .date(new Date(2018-1-5))
+                .customer(customerSaved1)
+                .build();
+
+        TransactionTO transactionTOSaved1 = transactionService.saveTransaction(transactionTO1);
+        TransactionTO transactionTOSaved2 = transactionService.saveTransaction(transactionTO1);
+        TransactionTO transactionTOSaved3 = transactionService.saveTransaction(transactionTO1);
+
+        //when
+        boolean check = transactionServiceImpl.checkThreeTransactions(transactionService.findOne(transactionTOSaved1.getId()));
+        //then
+        Assertions.assertThat(check).isEqualTo(true);
     }
 }

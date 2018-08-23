@@ -1,31 +1,20 @@
 package com.capgemini.types;
 
-
-import com.capgemini.enums.Status;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Singular;
 
-import java.util.Collection;
 import java.util.Date;
 
 @Getter
 @Builder
-public class TransactionTO {
-
+public class PositionTO {
     public int version;
     private Date createDate;
     private Date modifiedDate;
-
     private Long id;
-    private Status status;
-    private Date date;
     private Integer amount;
-
-    private CustomerTO customer;
-
-    @Singular
-    private Collection<Long> positions;
+    private TransactionTO transaction;
+    private ProductTO product;
 
     public int getVersion() {
         return version;
@@ -59,22 +48,6 @@ public class TransactionTO {
         this.id = id;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public Integer getAmount() {
         return amount;
     }
@@ -83,19 +56,19 @@ public class TransactionTO {
         this.amount = amount;
     }
 
-    public CustomerTO getCustomer() {
-        return customer;
+    public TransactionTO getTransaction() {
+        return transaction;
     }
 
-    public void setCustomer(CustomerTO customer) {
-        this.customer = customer;
+    public void setTransaction(TransactionTO transaction) {
+        this.transaction = transaction;
     }
 
-    public Collection<Long> getPositions() {
-        return positions;
+    public ProductTO getProduct() {
+        return product;
     }
 
-    public void setPositions(Collection<Long> positions) {
-        this.positions = positions;
+    public void setProduct(ProductTO product) {
+        this.product = product;
     }
 }

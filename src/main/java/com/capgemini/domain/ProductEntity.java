@@ -32,32 +32,28 @@ public class ProductEntity {
     @Column
     private Integer wage;
 
-    @ManyToMany
-    @JoinTable(
-            name = "TRANSACTION_PRODUCT",
-            joinColumns = {@JoinColumn(name="product_id")},
-            inverseJoinColumns = {@JoinColumn(name="transaction_id")}
-    )
-    private Collection<TransactionEntity> transactions;
+    @OneToMany(cascade={CascadeType.REMOVE}, mappedBy = "product")
+    private Collection<PositionEntity> positions;
 
     public ProductEntity() {
     }
-    public ProductEntity(String name, Float price, Float profit, Integer wage, Collection<TransactionEntity> transactions) {
+
+    public ProductEntity(String name, Float price, Float profit, Integer wage, Collection<PositionEntity> positions) {
         this.name = name;
         this.price = price;
         this.profit = profit;
         this.wage = wage;
-        this.transactions = transactions;
+        this.positions = positions;
     }
-    public ProductEntity(Long id, String name, Float price, Float profit, Integer wage, Collection<TransactionEntity> transactions) {
+
+    public ProductEntity(Long id, String name, Float price, Float profit, Integer wage, Collection<PositionEntity> positions) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.profit = profit;
         this.wage = wage;
-        this.transactions = transactions;
+        this.positions = positions;
     }
-
 
     public int getVersion() {
         return version;
@@ -123,11 +119,11 @@ public class ProductEntity {
         this.wage = wage;
     }
 
-    public Collection<TransactionEntity> getTransactions() {
-        return transactions;
+    public Collection<PositionEntity> getPositions() {
+        return positions;
     }
 
-    public void setTransactions(Collection<TransactionEntity> transactions) {
-        this.transactions = transactions;
+    public void setPositions(Collection<PositionEntity> positions) {
+        this.positions = positions;
     }
 }

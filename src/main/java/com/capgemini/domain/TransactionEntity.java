@@ -35,28 +35,30 @@ public class TransactionEntity {
     @ManyToOne
     private CustomerEntity customer;
 
-    @ManyToMany(cascade={CascadeType.REMOVE}, mappedBy = "transactions")
-    private Collection<ProductEntity> productEntities;
+    @OneToMany(cascade={CascadeType.REMOVE}, mappedBy = "transaction")
+    private Collection<PositionEntity> positions;
+
+
 
     public TransactionEntity() {
 
     }
 
-    public TransactionEntity(Status status, Date date, Integer amount, CustomerEntity customer, Collection<ProductEntity> productEntities) {
+    public TransactionEntity(Status status, Date date, Integer amount, CustomerEntity customer, Collection<PositionEntity> positions) {
         this.status = status;
         this.date = date;
         this.amount = amount;
         this.customer = customer;
-        this.productEntities = productEntities;
+        this.positions = positions;
     }
 
-    public TransactionEntity(Long id, Status status, Date date, Integer amount, CustomerEntity customer, Collection<ProductEntity> productEntities) {
+    public TransactionEntity(Long id, Status status, Date date, Integer amount, CustomerEntity customer, Collection<PositionEntity> positions) {
         this.id = id;
         this.status = status;
         this.date = date;
         this.amount = amount;
         this.customer = customer;
-        this.productEntities = productEntities;
+        this.positions = positions;
     }
 
     public int getVersion() {
@@ -123,11 +125,11 @@ public class TransactionEntity {
         this.customer = customer;
     }
 
-    public Collection<ProductEntity> getProductEntities() {
-        return productEntities;
+    public Collection<PositionEntity> getPositions() {
+        return positions;
     }
 
-    public void setProductEntities(Collection<ProductEntity> productEntities) {
-        this.productEntities = productEntities;
+    public void setPositions(Collection<PositionEntity> positions) {
+        this.positions = positions;
     }
 }

@@ -24,7 +24,7 @@ public class ProductTO {
     private Integer wage;
 
     @Singular
-    private Collection<Long> transactions;
+    private Collection<Long> positions;
 
     public int getVersion() {
         return version;
@@ -90,11 +90,11 @@ public class ProductTO {
         this.wage = wage;
     }
 
-    public Collection<Long> getTransactions() {
-        return transactions;
+    public Collection<Long> getPositions() {
+        return positions;
     }
 
-    public void setTransactions(Collection<Long> transactions) {
-        this.transactions = transactions;
+    public void setPositions(Collection<Long> positions) {
+        this.positions = positions;
     }
 }

@@ -1,6 +1,7 @@
 package com.capgemini.mappers;
 
 import com.capgemini.dao.TransactionDao;
+import com.capgemini.domain.PositionEntity;
 import com.capgemini.domain.ProductEntity;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.types.ProductTO;
@@ -22,12 +23,12 @@ public class ProductMapper {
         if (productEntity == null)
             return null;
 
-        Collection<Long> transactionsIDs = new HashSet<>();
-        Collection<TransactionEntity> transactions = productEntity.getTransactions();
+        Collection<Long> positionsIDs = new HashSet<>();
+        Collection<PositionEntity> positions = productEntity.getPositions();
 
-        if (transactions!=null) {
-            for (TransactionEntity element : transactions) {
-                transactionsIDs.add(element.getId());
+        if (positions!=null) {
+            for (PositionEntity element : positions) {
+                positionsIDs.add(element.getId());
             }
         }
 
@@ -37,7 +38,7 @@ public class ProductMapper {
                 .price(productEntity.getPrice())
                 .profit(productEntity.getProfit())
                 .wage(productEntity.getWage())
-                .transactions(transactionsIDs)
+                .positions(positionsIDs)
                 .build();
     }
 
@@ -52,15 +53,15 @@ public class ProductMapper {
         productEntity.setProfit(productTO.getProfit());
         productEntity.setWage(productTO.getWage());
 
-        Collection<Long> transactions = productTO.getTransactions();
-        Collection<TransactionEntity> transactionEntities = new HashSet<>();
+        Collection<Long> positions = productTO.getPositions();
+        Collection<PositionEntity> positionEntities = new HashSet<>();
 
-        if (transactions!=null){
-            for (Long element : transactions){
-                TransactionEntity transactionEntity = entityManager.getReference(TransactionEntity.class, element);
-                transactionEntities.add(transactionEntity);
+        if (positions!=null){
+            for (Long element : positions){
+                PositionEntity positionEntity = entityManager.getReference(PositionEntity.class, element);
+                positionEntities.add(positionEntity);
             }
-            productEntity.setTransactions(transactionEntities);
+            productEntity.setPositions(positionEntities);
         }
 
 

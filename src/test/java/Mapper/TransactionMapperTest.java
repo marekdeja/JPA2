@@ -1,6 +1,7 @@
 package Mapper;
 
 import com.capgemini.StarterKitJpaStarterApplication;
+import com.capgemini.domain.PositionEntity;
 import com.capgemini.domain.ProductEntity;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.Status;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.Position;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -37,18 +39,18 @@ public class TransactionMapperTest {
     @Transactional
     public void shouldBuildTOAndProductsSizeBeOne(){
         //given
-        ProductEntity productEntity1 = new ProductEntity("Apple", 4.44f, 0.1f, 20, null);
-        Collection<ProductEntity> productsEntities = new HashSet<>();
-        productsEntities.add(productEntity1);
+        PositionEntity positionEntity = new PositionEntity(5, null, null);
+        Collection<PositionEntity> positionEntities = new HashSet<>();
+        positionEntities.add(positionEntity);
 
-        TransactionEntity transactionEntity1 = new TransactionEntity( Status.INREALIZATION, new Date(2018-10-10), 2, null, productsEntities);
+        TransactionEntity transactionEntity1 = new TransactionEntity( Status.INREALIZATION, new Date(2018-10-10), 2, null, positionEntities);
 
 
         //when
         TransactionTO transactionTO = TransactionMapper.toTransactionTO(transactionEntity1);
 
         //then
-        int size = transactionTO.getProductIDs().size();
+        int size = transactionTO.getPositions().size();
         Assertions.assertThat(size).isEqualTo(1);
     }
 }
