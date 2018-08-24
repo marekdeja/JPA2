@@ -1,12 +1,13 @@
 package com.capgemini.domain;
 
 import com.capgemini.dao.listeners.ListenerCustomer;
+import com.capgemini.dao.listeners.ListenerPosition;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@EntityListeners(ListenerCustomer.class)
+@EntityListeners(ListenerPosition.class)
 @Table(name = "position")
 public class PositionEntity {
     private static final long serialVersionUID = 1L;

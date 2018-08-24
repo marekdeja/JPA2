@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Component
 public class PositionMapper {
@@ -47,5 +48,19 @@ public class PositionMapper {
 
         return positionEntity;
 
+    }
+
+    public static Collection<PositionTO> map2TOs (Collection<PositionEntity> positionEntities){
+        if (positionEntities==null){
+            return new HashSet<>();
+        }
+        return positionEntities.stream().map(PositionMapper::toPositionTO).collect(Collectors.toList());
+    }
+
+    public Collection<PositionEntity> map2Entities (Collection<PositionTO> positionTOs){
+        if (positionTOs==null){
+            return new HashSet<>();
+        }
+        return positionTOs.stream().map(this::toPositionEntity).collect(Collectors.toList());
     }
 }

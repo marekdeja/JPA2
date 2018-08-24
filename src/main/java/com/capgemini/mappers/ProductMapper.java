@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductMapper {
@@ -67,5 +68,20 @@ public class ProductMapper {
 
         return productEntity;
 
+    }
+
+
+    public static Collection<ProductTO> map2TOs (Collection<ProductEntity> productEntities){
+        if (productEntities==null){
+            return new HashSet<>();
+        }
+        return productEntities.stream().map(ProductMapper::toProductTO).collect(Collectors.toList());
+    }
+
+    public Collection<ProductEntity> map2Entities (Collection<ProductTO> productTOs){
+        if (productTOs==null){
+            return new HashSet<>();
+        }
+        return productTOs.stream().map(this::toProductEntity).collect(Collectors.toList());
     }
 }

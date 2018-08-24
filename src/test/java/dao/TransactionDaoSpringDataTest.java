@@ -53,7 +53,7 @@ public class TransactionDaoSpringDataTest {
         TransactionEntity save3 = transactionDao.save(transactionEntity3);
 
         //when
-        List<TransactionEntity> transactionsByCustomer = transactionDaoSpringData.findByCustomerId(2L);
+        List<TransactionEntity> transactionsByCustomer = transactionDaoSpringData.findByCustomerId(customerSave2.getId());
 
         //then
         int size = transactionsByCustomer.size();
