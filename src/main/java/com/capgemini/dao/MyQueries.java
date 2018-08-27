@@ -48,10 +48,20 @@ public class MyQueries {
     }
 
     //2.a
+
+    /**
+     * finding transaction by four parameters, may be given seperately and together
+     * @param sc - search criteria
+     * @return list of transactionEntities
+     */
     public List<TransactionEntity> findTransactionByCriteria(SearchCriteria sc){
         JPAQuery<TransactionEntity> query = new JPAQuery(entityManager);
         query.select(transaction)
                 .from(transaction);
+
+        if (sc.getCustomerName()==null && (sc.getStart()==null|| sc.getEnd()==null) && sc.getProduct()==null && sc.getPriceTransaction()==null){
+            return null;
+        }
 
         if(sc.getCustomerName()!=null){
             query.join(transaction.customer, customer);
@@ -72,13 +82,16 @@ public class MyQueries {
         if (sc.getProduct()!=null){
             query.where(product.eq(sc.getProduct()));
         }
-        if (sc.getPriceTransaction()!=null){
-            System.out.println("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-            System.out.println((position.amount.multiply(product.price)).floatValue());
 
-            query.where((position.amount.multiply(product.price)).floatValue().eq(sc.getPriceTransaction()));
-        }
         query.groupBy(transaction);
+
+        if (sc.getPriceTransaction()!=null){
+
+            query.having(position.amount
+                    .multiply(product.price)
+                    .floatValue().sum()
+                    .eq(sc.getPriceTransaction()));
+        }
 
         List<TransactionEntity> transactionsFound = query.fetch();
 
@@ -89,7 +102,14 @@ public class MyQueries {
 
     }
 
+
     //2.b
+
+    /**
+     * count all transaction price of given customer
+     * @param customerId
+     * @return float totalSum
+     */
     public Float getAllTransactionsPriceFromCustomer(Long customerId) {
         JPAQuery<CustomerEntity> query = new JPAQuery(entityManager);
         Float totalSum = query.select(product.price.sum())
@@ -102,6 +122,12 @@ public class MyQueries {
         return totalSum;
     }
 
+    /**
+     * calculate total sum of customer's transactions  with given status
+     * @param customerId
+     * @param status
+     * @return float totalSum
+     */
     //2.c.1
     public Float getSumTransactionStatusCustomer(Long customerId, Status status) {
         JPAQuery<CustomerEntity> query = new JPAQuery(entityManager);
@@ -115,6 +141,12 @@ public class MyQueries {
         return totalSum;
     }
 
+    /**
+     * calculate total sum of all customers' transactions  with given status
+     * @param status
+     * @param status
+     * @return float totalSum
+     */
     //2.c.2
     public Float getSumTransactionStatusAllCustomers(Status status) {
         JPAQuery<CustomerEntity> query = new JPAQuery(entityManager);
@@ -127,6 +159,10 @@ public class MyQueries {
         return totalSum;
     }
 
+    /**
+     * find 10 best selling products
+     * @return List of popularProducts
+     */
     //2.d
     public List<PositionEntity> getTenMostPopularProducts() {
         JPAQuery<PositionEntity> query = new JPAQuery(entityManager);
@@ -134,12 +170,20 @@ public class MyQueries {
                 .from(position)
                 .join(position.product, product)
                 .groupBy(position.product)
+                .orderBy(position.amount.desc())
                 .limit(10)
                 .fetch();
         return popularProducts;
     }
 
     //2.e
+
+    /**
+     * find 3 customers that spent the greatest amount of money in certain data range
+     * @param start
+     * @param end
+     * @return List of Tuple
+     */
     public List<Tuple> getCustomersWithMostPaymentInPeriodTime(Date start, Date end) {
         NumberPath<Float> sumPayment = Expressions.numberPath(Float.class, "sumPayment");
         JPAQuery<CustomerEntity> query = new JPAQuery(entityManager);
@@ -151,21 +195,33 @@ public class MyQueries {
                 .groupBy(customer)
                 .where(transaction.date.between(start, end))
                .orderBy(sumPayment.desc())
+                .limit(3)
                 .fetch();
         return customers;
     }
 
     //2.f
+
+    /**
+     * find products in preparation to be sent (status indelivery)
+     * @return List of tuple
+     */
     public List<Tuple> getProductsToBeSent() {
         JPAQuery<PositionEntity> query = new JPAQuery(entityManager);
         List<Tuple> productsToBeSent = query.select(position.amount, position.product.name)
-                .from(position)
+                .from(transaction)
                 .join(transaction.positions, position)
                 .where(transaction.status.eq(Status.INDELIVERY))
                 .fetch();
         return productsToBeSent;
     }
 
+    /**
+     * get profit of transactions in data range
+     * @param start
+     * @param end
+     * @return float totalSum
+     */
     //2.g
     public Float getProfitFromPeriod(Date start, Date end) {
         JPAQuery<TransactionEntity> query = new JPAQuery(entityManager);
