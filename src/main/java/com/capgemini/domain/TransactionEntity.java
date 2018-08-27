@@ -15,7 +15,8 @@ public class TransactionEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @Version public int version;
+    @Version
+    public int version;
     @Column
     private Date createDate;
     @Column
@@ -35,7 +36,7 @@ public class TransactionEntity {
     @ManyToOne
     private CustomerEntity customer;
 
-    @OneToMany(cascade={CascadeType.REMOVE}, mappedBy = "transaction")
+    @OneToMany(mappedBy = "transaction")
     private Collection<PositionEntity> positions;
 
 

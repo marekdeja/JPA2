@@ -634,12 +634,12 @@ public class TransactionServiceTest {
 
         //given
         ProductTO productTO1 = ProductTO.builder()
-                .name("Computer")
-                .price(8000.4f)
+                .name("Stone")
+                .price(80.4f)
                 .wage(5)
                 .build();
         ProductTO productTO2 = ProductTO.builder()
-                .name("Screen")
+                .name("Brick")
                 .price(1000f)
                 .wage(3)
                 .build();
@@ -669,7 +669,6 @@ public class TransactionServiceTest {
 
         TransactionTO transactionTO1 = TransactionTO.builder()
                 .status(Status.REALIZED)
-                .date(new Date(2018 - 1 - 5))
                 .positions(positionIDs)
                 .build();
 
@@ -758,12 +757,12 @@ public class TransactionServiceTest {
 
         ProductTO productTO1 = ProductTO.builder()
                 .name("Computer")
-                .price(8000.4f)
+                .price(800.4f)
                 .wage(10)
                 .build();
         ProductTO productTO2 = ProductTO.builder()
                 .name("Screen")
-                .price(1000f)
+                .price(100f)
                 .wage(3)
                 .build();
 

@@ -2,6 +2,7 @@ package dao;
 
 import com.capgemini.StarterKitJpaStarterApplication;
 import com.capgemini.dao.TransactionDao;
+import com.capgemini.domain.CustomerEntity;
 import com.capgemini.domain.TransactionEntity;
 import com.capgemini.enums.Status;
 import org.assertj.core.api.Assertions;
@@ -97,9 +98,6 @@ public class TransactionDaoTest {
         TransactionEntity update1 = transactionDao.update(save1);
 
         entityManager.flush();
-        System.out.println(update1.getCreateDate());
-        System.out.println(update1.getModifiedDate());
-
 
         //when
         Date updateDate = save1.getModifiedDate();
@@ -111,5 +109,30 @@ public class TransactionDaoTest {
         Assertions.assertThat(updateDate).isNotNull();
         Assertions.assertThat(year).isEqualTo(yearToday);
     }
+
+    //Optimistic locking test
+    @Test
+    @Transactional
+    public void shouldUpdateAndVersionChanges(){
+        //given
+        TransactionEntity transactionEntity1 = new TransactionEntity( Status.INREALIZATION, new Date(2018-10-10), 0, null, null);
+        TransactionEntity save1 = transactionDao.save(transactionEntity1);
+
+        int version1 = save1.getVersion();
+        save1.setAmount(5);
+        TransactionEntity update1 = transactionDao.update(save1);
+
+        entityManager.flush();
+        int version2 = update1.getVersion();
+
+        //when
+        System.out.println(version1);
+        System.out.println(version2);
+
+        //then
+        Assertions.assertThat(version1).isNotEqualTo(version2);
+    }
+
+
 
 }

@@ -173,11 +173,10 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     /**
-     * Check if wage is not over 25 kg
+     * Check if wage is not over 25 kg or more than 25 but price 50000 up
      * - get all the products from all position of transaction
      * - count the overall wage
      * - check condition
-     * - for further extension adding price of overdelivery to your bucket price
      * @param transactionTO
      * @return true or Exception
      */
@@ -196,8 +195,12 @@ public class TransactionServiceImpl implements TransactionService {
         for (ProductEntity product : productsAll) {
             wageAll += product.getWage();
         }
-        if (wageAll > 25) {
-            throw new RuntimeException("Wage too heavy (" + wageAll + ") for one delivery, 10zl will be added to your overall price");
+        Float priceAll = 0.0f;
+        for (ProductEntity product : productsAll) {
+            priceAll += product.getPrice();
+        }
+        if (wageAll > 25 &&priceAll<50000) {
+            throw new RuntimeException("Wage too heavy (" + wageAll + ") for delivery below 50000zl. Your price: "+priceAll);
             //send the message with overreaching the wage and add price o 10 to the end price
         }
         return true;
